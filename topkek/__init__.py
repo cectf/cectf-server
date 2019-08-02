@@ -1,7 +1,5 @@
 import os
 from flask import Flask
-import os.path as pathos
-from topkek import services, routes
 
 
 def create_app(test_config=None):
@@ -24,12 +22,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
-    services.init_app(app)
-    routes.init_app(app)
+    from . import users
+    users.init_app(app)
 
     return app
