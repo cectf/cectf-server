@@ -24,5 +24,7 @@ def create_app(test_config=None):
 
     from . import users
     users.init_app(app)
+    from . import challenges
+    challenges.init_app(app)
 
     return app

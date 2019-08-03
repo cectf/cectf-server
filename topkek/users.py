@@ -29,18 +29,18 @@ username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
 
 
-blueprint = Blueprint("users", __name__, url_prefix="/api/users")
+blueprint = Blueprint("users", __name__, url_prefix="/api/app/users")
 
 
 @blueprint.route("/username/<string:username>")
-def get_user_by_username(username=None):
+def get_user_by_username(username):
     if username and username in username_table:
         return jsonify(username_table[username].to_dict())
     return "Username not found", 404
 
 
-@blueprint.route("/id/<int:id>")
-def get_user_by_id(id=None):
+@blueprint.route("/<int:id>")
+def get_user_by_id(id):
     if id and id in userid_table:
         return jsonify(userid_table[id].to_dict())
     return "User ID not found", 404
