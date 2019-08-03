@@ -9,7 +9,7 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-Run `run.sh` to launch the Flask server. It is configured to run the server on `http:127.0.0.1:5001` by default.
+Run `run.sh` to launch the Flask server. It is configured to run the server on `http://127.0.0.1:5001` by default.
 
 Configuration can be done by adding variables to `instance/config.py`.
 
