@@ -6,7 +6,8 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev'
+        SECRET_KEY='dev',
+        JWT_AUTH_URL_RULE='/api/login/auth'
     )
 
     if test_config is None:
@@ -26,5 +27,7 @@ def create_app(test_config=None):
     users.init_app(app)
     from . import challenges
     challenges.init_app(app)
+    from . import authentication
+    authentication.init_app(app)
 
     return app

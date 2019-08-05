@@ -1,5 +1,6 @@
 
 from flask import Blueprint, jsonify
+from flask_jwt import jwt_required
 
 
 class Challenge(object):
@@ -34,12 +35,14 @@ challenge_map = {c.id: c for c in challenges}
 blueprint = Blueprint("challenges", __name__, url_prefix="/api/app/users")
 
 
+@jwt_required
 @blueprint.route("/<int:user_id>/challenges")
 def get_challenges(user_id):
     print("ALL DEM CHALLENGES ", [c.to_dict() for c in challenges])
     return jsonify([c.to_dict() for c in challenges])
 
 
+@jwt_required
 @blueprint.route("/<int:user_id>/challenge/<int:challenge_id>")
 def get_user_by_id(user_id, challenge_id):
     if challenge_id and challenge_id in challenge_map:
