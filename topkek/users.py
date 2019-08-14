@@ -10,7 +10,7 @@ class User(object):
         self.id = id
         self.username = username
         self.password = password
-        self.admin = admin
+        self.admin = True if admin else False
 
     def __str__(self):
         return 'User(id="%s")' % self.id

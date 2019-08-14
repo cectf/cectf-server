@@ -13,8 +13,8 @@ class Challenge(object):
         self.body = body
         self.hint = hint
         self.solution = solution
-        self.hinted = hinted
-        self.solved = solved
+        self.hinted = True if hinted else False
+        self.solved = True if solved else False
 
     def __str__(self):
         return 'Challenge(id="%s",title="%s")' % (self.id, self.title)
@@ -48,7 +48,7 @@ def get_challenges(user_id):
 
 
 @app_jwt_required
-@blueprint.route("/<int:user_id>/challenge/<int:challenge_id>", methods=['GET', 'POST'])
+@blueprint.route("/<int:user_id>/challenges/<int:challenge_id>", methods=['GET', 'POST'])
 def submit_flag(user_id, challenge_id):
     connection = db.get_db()
     cursor = connection.cursor(buffered=True)
@@ -72,7 +72,6 @@ def submit_flag(user_id, challenge_id):
     else:
         print("it no match :(")
         return jsonify(challenge.to_dict()), 403
-    return jsonify(challenge.to_dict())
 
 
 def init_app(app):
