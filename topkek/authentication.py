@@ -1,8 +1,8 @@
 
+from topkek import users
 from flask import jsonify, session
 from werkzeug.security import safe_str_cmp
 from flask_jwt import JWT
-from topkek import users
 
 
 def authenticate(username, password):

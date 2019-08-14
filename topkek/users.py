@@ -1,6 +1,8 @@
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, session
 from flask_jwt import jwt_required
+from topkek import db
+from topkek.auth_headers import admin_jwt_required, app_jwt_required
 
 
 class User(object):
@@ -20,32 +22,38 @@ class User(object):
                 "admin": self.admin}
 
 
-users = [
-    User(1, 'a', 'b', False),
-    User(2, 'abc', '123', True),
-    User(3, 'daniel', 'password', True),
-]
+def get_user():
+    if session["id"]:
+        return get_user_by_id(session["id"])
+    return None
 
-username_table = {u.username: u for u in users}
-userid_table = {u.id: u for u in users}
+
+def get_user_by_id(id):
+    connection = db.get_db()
+    cursor = connection.cursor(buffered=True)
+    cursor.execute("SELECT * FROM users WHERE id=%s", (id,))
+    row = cursor.fetchone()
+    print(row)
+    if row:
+        return User(*row)
+    return None
+
+
+def get_user_by_username(username):
+    connection = db.get_db()
+    cursor = connection.cursor(buffered=True)
+    cursor.execute("SELECT * FROM users WHERE username=%s", (username,))
+    row = cursor.fetchone()
+    print(row)
+    if row:
+        return User(*row)
+    return None
 
 
 blueprint = Blueprint("users", __name__, url_prefix="/api/app/users")
 
 
-def get_user_by_username(username):
-    if username and username in username_table:
-        return username_table[username]
-    return None
-
-
-def get_user_by_id(id):
-    if id and id in userid_table:
-        return userid_table[id]
-    return None
-
-
-@jwt_required
+@app_jwt_required
 @blueprint.route("/username/<string:username>")
 def get_user_by_username_route(username):
     user = get_user_by_username(username)
@@ -54,7 +62,7 @@ def get_user_by_username_route(username):
     return "Username not found", 404
 
 
-@jwt_required
+@app_jwt_required
 @blueprint.route("/<int:id>")
 def get_user_by_id_route(id):
     user = get_user_by_id(id)

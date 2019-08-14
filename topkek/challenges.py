@@ -1,53 +1,78 @@
 
-from flask import Blueprint, jsonify
-from flask_jwt import jwt_required
+from flask import Blueprint, jsonify, request
+from flask_jwt import jwt_required, current_identity
+from topkek import db
+from topkek.auth_headers import admin_jwt_required, app_jwt_required
 
 
 class Challenge(object):
-    def __init__(self, id, title, category, text, solved):
+    def __init__(self, id, title, category, body, hint, solution, hinted, solved):
         self.id = id
         self.title = title
         self.category = category
-        self.text = text
+        self.body = body
+        self.hint = hint
+        self.solution = solution
+        self.hinted = hinted
         self.solved = solved
 
     def __str__(self):
         return 'Challenge(id="%s",title="%s")' % (self.id, self.title)
 
     def to_dict(self):
-        return {"id": self.id,
-                "title": self.title,
-                "category": self.category,
-                "text": self.text,
-                "solved": self.solved}
-
-
-challenges = [
-    Challenge(1, "The First Challenge", "crypto",
-              "Just think really hard", True),
-    Challenge(2, "The Second Challenge", "reversing",
-              "Just think really harder", False)
-]
-
-challenge_map = {c.id: c for c in challenges}
+        _dict = {"id": self.id,
+                 "title": self.title,
+                 "category": self.category,
+                 "body": self.body,
+                 "hinted": self.hinted,
+                 "solved": self.solved}
+        if self.hinted:
+            _dict["hint"] = self.hint
+        if self.solved:
+            _dict["solution"] = self.solution
+        return _dict
 
 
 blueprint = Blueprint("challenges", __name__, url_prefix="/api/app/users")
 
 
-@jwt_required
 @blueprint.route("/<int:user_id>/challenges")
+@app_jwt_required
 def get_challenges(user_id):
-    print("ALL DEM CHALLENGES ", [c.to_dict() for c in challenges])
-    return jsonify([c.to_dict() for c in challenges])
+    print("yee yee", current_identity)
+    connection = db.get_db()
+    cursor = connection.cursor(buffered=True)
+    cursor.execute(
+        "SELECT id, title, category, body, hint, solution, hinted, solved FROM challenges LEFT JOIN solves ON challenges.id = solves.challenge_id")
+    return jsonify([Challenge(*c).to_dict() for c in cursor])
 
 
-@jwt_required
-@blueprint.route("/<int:user_id>/challenge/<int:challenge_id>")
-def get_user_by_id(user_id, challenge_id):
-    if challenge_id and challenge_id in challenge_map:
-        return jsonify(challenge_map[challenge_id].to_dict())
-    return "Challenge ID not found", 404
+@app_jwt_required
+@blueprint.route("/<int:user_id>/challenge/<int:challenge_id>", methods=['GET', 'POST'])
+def submit_flag(user_id, challenge_id):
+    connection = db.get_db()
+    cursor = connection.cursor(buffered=True)
+    cursor.execute("SELECT id, title, category, body, hint, solution, hinted, solved FROM challenges LEFT JOIN solves ON challenges.id=solves.challenge_id WHERE challenges.id=%s", (challenge_id,))
+    row = cursor.fetchone()
+    challenge = Challenge(*row)
+    if (request.method == 'GET'):
+        return jsonify(challenge.to_dict())
+
+    if challenge.solved:
+        return jsonify({'message': 'Already solved!'})
+    flag = request.get_json()['flag']
+    print("Submitting flag %s", flag)
+    if challenge.solution == flag:
+        challenge.solved = True
+        cursor = connection.cursor(buffered=True)
+        cursor.execute("INSERT INTO solves (user_id, challenge_id, hinted, solved) VALUES (%s, %s, %s, %s)",
+                       (user_id, challenge_id, challenge.hinted, challenge.solved))
+        connection.commit()
+        return jsonify(challenge.to_dict())
+    else:
+        print("it no match :(")
+        return jsonify(challenge.to_dict()), 403
+    return jsonify(challenge.to_dict())
 
 
 def init_app(app):
