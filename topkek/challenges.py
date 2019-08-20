@@ -1,5 +1,5 @@
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 from flask_jwt import jwt_required, current_identity
 from topkek import db
 from topkek.auth_headers import admin_jwt_required, app_jwt_required
@@ -47,6 +47,11 @@ def get_challenges(user_id):
     return jsonify([Challenge(*c).to_dict() for c in cursor])
 
 
+INCORRECT = 0
+CORRECT = 1
+ALREADY_SOLVED = 2
+
+
 @app_jwt_required
 @blueprint.route("/<int:user_id>/challenges/<int:challenge_id>", methods=['GET', 'POST'])
 def submit_flag(user_id, challenge_id):
@@ -57,9 +62,8 @@ def submit_flag(user_id, challenge_id):
     challenge = Challenge(*row)
     if (request.method == 'GET'):
         return jsonify(challenge.to_dict())
-
     if challenge.solved:
-        return jsonify({'message': 'Already solved!'})
+        return jsonify({'status': ALREADY_SOLVED})
     flag = request.get_json()['flag']
     print("Submitting flag %s", flag)
     if challenge.solution == flag:
@@ -68,10 +72,10 @@ def submit_flag(user_id, challenge_id):
         cursor.execute("INSERT INTO solves (user_id, challenge_id, hinted, solved) VALUES (%s, %s, %s, %s)",
                        (user_id, challenge_id, challenge.hinted, challenge.solved))
         connection.commit()
-        return jsonify(challenge.to_dict())
+        return jsonify({'status': CORRECT, 'challenge': challenge.to_dict()})
     else:
         print("it no match :(")
-        return jsonify(challenge.to_dict()), 403
+        return jsonify({'status': INCORRECT})
 
 
 def init_app(app):

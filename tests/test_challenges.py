@@ -32,6 +32,7 @@ def test_get_challenge(client):
     response = client.get('/api/app/users/1/challenges/1',
                           headers=_get_headers(client))
     assert response.status_code == 200
+    print(response.json)
     assert response.json['id'] == 1
     assert response.json['title'] == 'The First Challenge'
     assert response.json['solved'] == False
@@ -45,25 +46,26 @@ def test_submit_correct_flag(client):
                            headers=_get_headers(client),
                            json={'flag': 'CTF{l0l}'})
     assert response.status_code == 200
-    assert response.json['id'] == 1
-    assert response.json['title'] == 'The First Challenge'
-    assert response.json['solved'] == True
-    assert response.json['hinted'] == False
-    assert response.json['solution'] == 'CTF{l0l}'
-    assert 'hint' not in response.json
+    print(response.json)
+    assert response.json == {
+        'status': challenges.CORRECT,
+        'challenge': {
+            'id': 1,
+            'title': 'The First Challenge',
+            'category': 'crypto',
+            'body': 'Just think really hard!',
+            'solved': True,
+            'solution': 'CTF{l0l}',
+            'hinted': False}}
 
 
 def test_submit_incorrect_flag(client):
     response = client.post('/api/app/users/1/challenges/1',
                            headers=_get_headers(client),
                            json={'flag': 'CTF{l0l_n0p3}'})
-    assert response.status_code == 403
-    assert response.json['id'] == 1
-    assert response.json['title'] == 'The First Challenge'
-    assert response.json['solved'] == False
-    assert response.json['hinted'] == False
-    assert 'solution' not in response.json
-    assert 'hint' not in response.json
+    assert response.status_code == 200
+    print(response.json)
+    assert response.json == {'status': challenges.INCORRECT}
 
 
 def test_submit_twice(client):
@@ -74,4 +76,5 @@ def test_submit_twice(client):
                            headers=_get_headers(client),
                            json={'flag': 'CTF{l0l}'})
     assert response.status_code == 200
-    assert response.json == {'message': 'Already solved!'}
+    print(response.json)
+    assert response.json == {'status': challenges.ALREADY_SOLVED}
