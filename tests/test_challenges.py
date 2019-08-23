@@ -8,10 +8,10 @@ def _get_token(client):
 
 
 def _get_headers(client):
-    return {'Authorization': 'JWT ' + _get_token(client)}
+    return {}  # {'Authorization': 'JWT ' + _get_token(client)}
 
 
-def test_get_challenges(client):
+def test_get_challenges(app, client):
     response = client.get('/api/app/users/1/challenges',
                           headers=_get_headers(client))
     assert response.status_code == 200
@@ -28,7 +28,7 @@ def test_get_challenges(client):
     assert challenge2['hinted'] == False
 
 
-def test_get_challenge(client):
+def test_get_challenge(app, client):
     response = client.get('/api/app/users/1/challenges/1',
                           headers=_get_headers(client))
     assert response.status_code == 200
@@ -41,7 +41,7 @@ def test_get_challenge(client):
     assert 'hint' not in response.json
 
 
-def test_submit_correct_flag(client):
+def test_submit_correct_flag(app, client):
     response = client.post('/api/app/users/1/challenges/1',
                            headers=_get_headers(client),
                            json={'flag': 'CTF{l0l}'})
@@ -59,7 +59,7 @@ def test_submit_correct_flag(client):
             'hinted': False}}
 
 
-def test_submit_incorrect_flag(client):
+def test_submit_incorrect_flag(app, client):
     response = client.post('/api/app/users/1/challenges/1',
                            headers=_get_headers(client),
                            json={'flag': 'CTF{l0l_n0p3}'})
@@ -68,7 +68,7 @@ def test_submit_incorrect_flag(client):
     assert response.json == {'status': challenges.INCORRECT}
 
 
-def test_submit_twice(client):
+def test_submit_twice(app, client):
     client.post('/api/app/users/1/challenges/1',
                 headers=_get_headers(client),
                 json={'flag': 'CTF{l0l}'})

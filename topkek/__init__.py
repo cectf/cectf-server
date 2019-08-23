@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_security import Security
 
 
 def create_app(test_config=None):
@@ -7,7 +8,8 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE='test',
+        SQLALCHEMY_DATABASE_URI='mysql+pymysql://localhost/test',
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
         JWT_AUTH_URL_RULE='/api/login/auth'
     )
 
@@ -24,13 +26,19 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db
-    db.init_app(app)
+    from . import database
+    database.init_app(app)
+
+    # Setup Flask-Security
+    security = Security(app, database.user_datastore)
+
     from . import users
     users.init_app(app)
+
     from . import challenges
     challenges.init_app(app)
-    from . import authentication
-    authentication.init_app(app)
+
+    #from . import authentication
+    # authentication.init_app(app)
 
     return app

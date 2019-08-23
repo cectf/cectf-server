@@ -1,19 +1,21 @@
 
 import pytest
 from topkek import create_app
-from topkek import db
+from topkek import database
 
 
 @pytest.fixture
 def app():
     app = create_app({
         'TESTING': True,
-        'DATABASE': 'test'
+        'SQLALCHEMY_DATABASE_URI': 'mysql+pymysql://localhost/test',
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False,
     })
 
     with app.app_context():
-        db.init_db()
-        db.init_test_db()
+        database.init_app(app)
+        database.reset_db()
+        database.init_test_db()
 
     yield app
 
