@@ -4,7 +4,7 @@ import click
 from flask import current_app
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import SQLAlchemyUserDatastore
+from flask_security import SQLAlchemyUserDatastore, utils
 
 
 db = SQLAlchemy()
@@ -21,6 +21,8 @@ def reset_db():
 
 def init_test_db():
     from topkek.models import Role, User, RolesUsers, Challenge, Solve
+
+    print(current_app.config['SECURITY_PASSWORD_SALT'])
 
     admin_role = Role(
         id=1,
@@ -39,16 +41,19 @@ def init_test_db():
         id=1,
         username="a",
         email="a@chiquito.com",
-        password="b")
+        password=utils.hash_password("b"),
+        active=True)
     abc_user = User(
         id=2,
         username="abc",
         email="abc@chiquito.com",
-        password="123")
+        password=utils.hash_password("123"),
+        active=True)
 
     db.session.add(a_user)
     db.session.add(abc_user)
     db.session.commit()
+    print(utils.verify_password("b", a_user.password))
 
     a_contestant = RolesUsers(
         user_id=a_user.id,

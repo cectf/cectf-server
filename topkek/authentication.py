@@ -1,9 +1,8 @@
-
+'''
 from topkek import users
 from flask import jsonify, session
 from werkzeug.security import safe_str_cmp
 from flask_jwt import JWT
-
 
 def authenticate(username, password):
     user = users.get_user_by_username(username)
@@ -18,3 +17,19 @@ def identity(payload):
 
 def init_app(app):
     jwt = JWT(app, authenticate, identity)
+'''
+
+from flask import Blueprint, session, jsonify
+from flask_wtf.csrf import generate_csrf
+
+blueprint = Blueprint('authentication', __name__, url_prefix='/api/login')
+
+
+# @app_jwt_required
+@blueprint.route('/csrf', methods=['GET'])
+def csrf():
+    return jsonify({'csrf_token': generate_csrf()})
+
+
+def init_app(app):
+    app.register_blueprint(blueprint)

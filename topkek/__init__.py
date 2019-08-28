@@ -10,7 +10,11 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI='mysql+pymysql://localhost/test',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        JWT_AUTH_URL_RULE='/api/login/auth'
+        SECURITY_TRACKABLE=True,
+        SECURITY_REGISTERABLE=True,
+        SECURITY_PASSWORD_SALT='salty',
+        SECURITY_SEND_REGISTER_EMAIL=False,
+        SECURITY_LOGIN_URL='/api/login/auth'
     )
 
     if test_config is None:
@@ -29,8 +33,11 @@ def create_app(test_config=None):
     from . import database
     database.init_app(app)
 
+    from . import forms
+
     # Setup Flask-Security
-    security = Security(app, database.user_datastore)
+    security = Security(app, database.user_datastore,
+                        login_form=forms.ExtendedLoginForm)
 
     from . import users
     users.init_app(app)
@@ -38,7 +45,7 @@ def create_app(test_config=None):
     from . import challenges
     challenges.init_app(app)
 
-    #from . import authentication
-    # authentication.init_app(app)
+    from . import authentication
+    authentication.init_app(app)
 
     return app
