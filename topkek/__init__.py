@@ -14,7 +14,12 @@ def create_app(test_config=None):
         SECURITY_REGISTERABLE=True,
         SECURITY_PASSWORD_SALT='salty',
         SECURITY_SEND_REGISTER_EMAIL=False,
-        SECURITY_LOGIN_URL='/api/login/auth'
+        SECURITY_LOGIN_URL='/api/login',
+        # the default logout returns a 302, so we define our own logout method
+        SECURITY_LOGOUT_URL='/logout',
+        SECURITY_REGISTER_URL='/api/register',
+        SECURITY_POST_LOGIN_VIEW="/",
+        SECURITY_POST_LOGOUT_VIEW="/"
     )
 
     if test_config is None:
@@ -37,7 +42,8 @@ def create_app(test_config=None):
 
     # Setup Flask-Security
     security = Security(app, database.user_datastore,
-                        login_form=forms.ExtendedLoginForm)
+                        login_form=forms.ExtendedLoginForm,
+                        confirm_register_form=forms.ExtendedConfirmRegisterForm)
 
     from . import users
     users.init_app(app)

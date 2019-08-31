@@ -1,32 +1,9 @@
 
 from flask import Blueprint, jsonify, session
+from flask_security.core import current_user
+from flask_security.decorators import login_required, roles_required
 from topkek.database import db
 from topkek.models import User
-#from topkek.auth_headers import admin_jwt_required, app_jwt_required
-
-'''
-class User(object):
-    def __init__(self, id, username, password, admin):
-        self.id = id
-        self.username = username
-        self.password = password
-        self.admin = True if admin else False
-
-    def __str__(self):
-        return 'User(id="%s")' % self.id
-
-    def to_dict(self):
-        return {"id": self.id,
-                "username": self.username,
-                "password": self.password,
-                "admin": self.admin}
-'''
-
-
-def get_user():
-    if session["id"]:
-        return get_user_by_id(session["id"])
-    return None
 
 
 def get_user_by_id(id):
@@ -37,11 +14,18 @@ def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
 
 
-blueprint = Blueprint("users", __name__, url_prefix="/api/app/users")
+blueprint = Blueprint("users", __name__, url_prefix="/api/user")
 
 
-# @app_jwt_required
+@blueprint.route("/")
+@login_required
+def get_current_user_route():
+    return current_user.serialize
+
+
 @blueprint.route("/username/<string:username>")
+@roles_required('admin')
+@login_required
 def get_user_by_username_route(username):
     user = get_user_by_username(username)
     if user:
@@ -49,8 +33,9 @@ def get_user_by_username_route(username):
     return "Username not found", 404
 
 
-# @app_jwt_required
 @blueprint.route("/<int:id>")
+@roles_required('admin')
+@login_required
 def get_user_by_id_route(id):
     user = get_user_by_id(id)
     if user:

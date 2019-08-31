@@ -1,19 +1,19 @@
 
 from flask import Blueprint, jsonify, request, Response
-#from flask_jwt import jwt_required, current_identity
+from flask_security.core import current_user
+from flask_security.decorators import login_required, roles_required
 from topkek.database import db
 from topkek.models import Challenge, User, Solve
-from topkek.auth_headers import admin_jwt_required, app_jwt_required
 
 
-blueprint = Blueprint("challenges", __name__, url_prefix="/api/app/users")
+blueprint = Blueprint("challenges", __name__, url_prefix="/api/challenge")
 
 
-@blueprint.route("/<int:user_id>/challenges")
-# @app_jwt_required
-def get_challenges(user_id):
-    solves = User.query.filter_by(id=user_id).first().solves
-    return jsonify([solve.challenge.serialize(solve=solve) for solve in solves])
+@blueprint.route("/")
+@roles_required('contestant')
+@login_required
+def get_challenges():
+    return jsonify([solve.challenge.serialize(solve=solve) for solve in current_user.solves])
 
 
 INCORRECT = 0
@@ -21,11 +21,12 @@ CORRECT = 1
 ALREADY_SOLVED = 2
 
 
-# @app_jwt_required
-@blueprint.route("/<int:user_id>/challenges/<int:challenge_id>", methods=['GET', 'POST'])
-def submit_flag(user_id, challenge_id):
+@blueprint.route("/<int:challenge_id>", methods=['GET', 'POST'])
+@roles_required('contestant')
+@login_required
+def submit_flag(challenge_id):
     solve = Solve.query.filter_by(
-        user_id=user_id, challenge_id=challenge_id).first()
+        user_id=current_user.id, challenge_id=challenge_id).first()
     if (request.method == 'GET'):
         return jsonify(solve.challenge.serialize(solve))
     if solve.solved:
