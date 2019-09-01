@@ -2,14 +2,11 @@
 
 You need Python 3 and pip installed to set up this project.
 
-Navigate to the project repository and do this to set up the python virtual environment and enable it:
+Navigate to the project repository and run `./setup_workspace.sh`. This will set up the python virtual environment and install the python dependencies.
 
-```
-python3 -m venv venv
-source venv/bin/activate
-```
+You will need to install MariaDB (https://mariadb.com/downloads/#aptyum) and have it running on localhost.
 
-Run `setup.sh` to set up the test database with dummy data. Right now this provisions a user `a` with password `b`, and an admin user `abc` with password `123`. You will need to use these credentials to log in to the app.
+Run `db_setup.sh` to set up the `test` database with dummy data. Right now this provisions a user `a` with password `b`, and an admin user `abc` with password `123`. You will need to use these credentials to log in to the app.
 
 Run `run.sh` to launch the Flask server. It is configured to run the server on `http://127.0.0.1:5001` by default.
 

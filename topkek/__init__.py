@@ -7,12 +7,9 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI='mysql+pymysql://localhost/test',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECURITY_TRACKABLE=True,
         SECURITY_REGISTERABLE=True,
-        SECURITY_PASSWORD_SALT='salty',
         SECURITY_SEND_REGISTER_EMAIL=False,
         SECURITY_LOGIN_URL='/api/login',
         # the default logout returns a 302, so we define our own logout method
