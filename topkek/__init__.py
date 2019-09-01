@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, Response
 from flask_security import Security
 
 
@@ -44,6 +44,10 @@ def create_app(test_config=None):
     security = Security(app, database.user_datastore,
                         login_form=forms.ExtendedLoginForm,
                         confirm_register_form=forms.ExtendedConfirmRegisterForm)
+    security.unauthorized_handler(
+        lambda: Response('Unauthorized', 400))
+    app.login_manager.unauthorized_handler(
+        lambda: Response('Unauthorized', 400))
 
     from . import users
     users.init_app(app)
