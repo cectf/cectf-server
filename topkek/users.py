@@ -20,7 +20,7 @@ blueprint = Blueprint("users", __name__, url_prefix="/api")
 @blueprint.route("/user")
 @login_required
 def get_current_user_route():
-    return current_user.serialize
+    return jsonify(current_user.serialize)
 
 
 @blueprint.route("/user/username/<string:username>")

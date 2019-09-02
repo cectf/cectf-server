@@ -22,8 +22,6 @@ def reset_db():
 def init_test_db():
     from topkek.models import Role, User, RolesUsers, Challenge, Solve
 
-    print(current_app.config['SECURITY_PASSWORD_SALT'])
-
     admin_role = Role(
         id=1,
         name="admin",
@@ -53,7 +51,6 @@ def init_test_db():
     db.session.add(a_user)
     db.session.add(abc_user)
     db.session.commit()
-    print(utils.verify_password("b", a_user.password))
 
     a_contestant = RolesUsers(
         user_id=a_user.id,
@@ -145,6 +142,7 @@ def init_app(app):
     global user_datastore
 
     db.init_app(app)
+    db.app = app
 
     from topkek.models import User, Role
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)

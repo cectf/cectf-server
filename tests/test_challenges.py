@@ -1,52 +1,57 @@
 from topkek import challenges
 
-
-def _get_token(client):
-    response = client.post(
-        '/api/login/auth', json={'username': 'a', 'password': 'b'})
-    return response.json['access_token']
+from helpers import setup_test
 
 
 def _get_headers(client):
     return {}  # {'Authorization': 'JWT ' + _get_token(client)}
 
 
+@setup_test('/api/challenges', user_id=1)
 def test_get_challenges(app, client):
-    response = client.get('/api/app/users/1/challenges',
-                          headers=_get_headers(client))
+    response = challenges.get_challenges()
     assert response.status_code == 200
-    assert len(response.json) == 2
-    challenge1 = response.json[0]
-    assert challenge1['id'] == 1
-    assert challenge1['title'] == 'The First Challenge'
-    assert challenge1['solved'] == False
-    assert challenge1['hinted'] == False
-    challenge2 = response.json[1]
-    assert challenge2['id'] == 2
-    assert challenge2['title'] == 'The Second Challenge'
-    assert challenge2['solved'] == False
-    assert challenge2['hinted'] == False
+    assert response.json == [
+        {
+            "id": 1,
+            "title": "The First Challenge",
+            "category": "crypto",
+            "body": "Just think really hard!",
+            "hinted": False,
+            "solved": False
+        },
+        {
+            "id": 2,
+            "title": "The Second Challenge",
+            "category": "reversing",
+            "body": "Just think really harder!",
+            "hinted": False,
+            "solved": False
+        }
+    ]
 
 
+@setup_test('/api/challenges/1', user_id=1)
 def test_get_challenge(app, client):
-    response = client.get('/api/app/users/1/challenges/1',
-                          headers=_get_headers(client))
+    response = challenges.submit_flag(1)
     assert response.status_code == 200
-    print(response.json)
-    assert response.json['id'] == 1
-    assert response.json['title'] == 'The First Challenge'
-    assert response.json['solved'] == False
-    assert response.json['hinted'] == False
-    assert 'solution' not in response.json
-    assert 'hint' not in response.json
+    assert response.json == {
+        "id": 1,
+        "title": "The First Challenge",
+        "category": "crypto",
+        "body": "Just think really hard!",
+        "hinted": False,
+        "solved": False
+    }
 
 
+@setup_test('/api/challenges/1',
+            method="POST",
+            json={'flag': 'CTF{l0l}'},
+            user_id=1)
 def test_submit_correct_flag(app, client):
-    response = client.post('/api/app/users/1/challenges/1',
-                           headers=_get_headers(client),
-                           json={'flag': 'CTF{l0l}'})
+    response = challenges.submit_flag(1)
     assert response.status_code == 200
-    print(response.json)
     assert response.json == {
         'status': challenges.CORRECT,
         'challenge': {
@@ -54,27 +59,29 @@ def test_submit_correct_flag(app, client):
             'title': 'The First Challenge',
             'category': 'crypto',
             'body': 'Just think really hard!',
+            'hinted': False,
             'solved': True,
-            'solution': 'CTF{l0l}',
-            'hinted': False}}
+            'solution': 'CTF{l0l}'
+        }
+    }
 
 
+@setup_test('/api/challenges/1',
+            method="POST",
+            json={'flag': 'CTF{l0l_n0p3}'},
+            user_id=1)
 def test_submit_incorrect_flag(app, client):
-    response = client.post('/api/app/users/1/challenges/1',
-                           headers=_get_headers(client),
-                           json={'flag': 'CTF{l0l_n0p3}'})
+    response = challenges.submit_flag(1)
     assert response.status_code == 200
-    print(response.json)
     assert response.json == {'status': challenges.INCORRECT}
 
 
+@setup_test('/api/challenges/1',
+            method="POST",
+            json={'flag': 'CTF{l0l}'},
+            user_id=1)
 def test_submit_twice(app, client):
-    client.post('/api/app/users/1/challenges/1',
-                headers=_get_headers(client),
-                json={'flag': 'CTF{l0l}'})
-    response = client.post('/api/app/users/1/challenges/1',
-                           headers=_get_headers(client),
-                           json={'flag': 'CTF{l0l}'})
+    challenges.submit_flag(1)
+    response = challenges.submit_flag(1)
     assert response.status_code == 200
-    print(response.json)
     assert response.json == {'status': challenges.ALREADY_SOLVED}

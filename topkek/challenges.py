@@ -9,7 +9,7 @@ from topkek.models import Challenge, User, Solve
 blueprint = Blueprint("challenges", __name__, url_prefix="/api")
 
 
-@blueprint.route("/challenge")
+@blueprint.route("/challenges")
 @roles_required('contestant')
 @login_required
 def get_challenges():
@@ -21,7 +21,7 @@ CORRECT = 1
 ALREADY_SOLVED = 2
 
 
-@blueprint.route("/challenge/<int:challenge_id>", methods=['GET', 'POST'])
+@blueprint.route("/challenges/<int:challenge_id>", methods=['GET', 'POST'])
 @roles_required('contestant')
 @login_required
 def submit_flag(challenge_id):
