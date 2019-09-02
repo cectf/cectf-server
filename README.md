@@ -4,7 +4,7 @@ You need Python 3 and pip installed to set up this project.
 
 Navigate to the project repository and run `./setup_workspace.sh`. This will set up the python virtual environment and install the python dependencies.
 
-You will need to install MariaDB (https://mariadb.com/downloads/#aptyum) and have it running on localhost.
+You will need to install MariaDB (https://mariadb.com/downloads/#aptyum) and have it running on localhost. For testing purposes, the user `travis` with no password needs to be created (`CREATE USER 'travis'@'localhost' IDENTIFIED BY '';`)
 
 Run `db_setup.sh` to set up the `test` database with dummy data. Right now this provisions a user `a` with password `b`, and an admin user `abc` with password `123`. You will need to use these credentials to log in to the app.
 

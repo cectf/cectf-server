@@ -9,7 +9,7 @@ from topkek.models import User
 def app():
     app = create_app({
         'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': 'mysql+pymysql://localhost/test',
+        'SQLALCHEMY_DATABASE_URI': 'mysql+pymysql://travis@localhost/test',
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         'SECRET_KEY': 'test',
         'SECURITY_PASSWORD_SALT': 'test',
