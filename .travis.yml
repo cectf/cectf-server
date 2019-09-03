@@ -17,3 +17,4 @@ deploy:
   on:
     branch: master
     tags: true
+  skip_cleanup: true
