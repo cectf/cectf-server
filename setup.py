@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='topkek',
-    version='1.0.6',
+    version='1.0.7',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -11,6 +11,7 @@ setup(
         'Flask-Security',
         'Flask-SQLAlchemy',
         'SQLAlchemy',
-        'PyMySQL'
+        'PyMySQL',
+        'bcrypt'
     ],
 )
