@@ -2,8 +2,8 @@
 from flask import Blueprint, jsonify, request, Response
 from flask_security.core import current_user
 from flask_security.decorators import login_required, roles_required
-from topkek.database import db
-from topkek.models import Challenge, User, Solve
+from .database import db
+from .models import Challenge, User, Solve
 
 
 blueprint = Blueprint("challenges", __name__, url_prefix="/api")

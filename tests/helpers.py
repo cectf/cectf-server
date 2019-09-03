@@ -1,5 +1,5 @@
 from decorator import decorator
-from topkek.models import User
+from topkek_server.models import User
 from flask_security.utils import login_user
 
 

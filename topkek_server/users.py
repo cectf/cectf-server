@@ -2,8 +2,8 @@
 from flask import Blueprint, jsonify, session
 from flask_security.core import current_user
 from flask_security.decorators import login_required, roles_required
-from topkek.database import db
-from topkek.models import User
+from .database import db
+from .models import User
 
 
 def get_user_by_id(id):

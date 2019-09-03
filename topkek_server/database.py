@@ -20,7 +20,7 @@ def reset_db():
 
 
 def init_test_db():
-    from topkek.models import Role, User, RolesUsers, Challenge, Solve
+    from .models import Role, User, RolesUsers, Challenge, Solve
 
     admin_role = Role(
         id=1,
@@ -144,7 +144,7 @@ def init_app(app):
     db.init_app(app)
     db.app = app
 
-    from topkek.models import User, Role
+    from .models import User, Role
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
     app.cli.add_command(init_db_command)

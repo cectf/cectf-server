@@ -1,8 +1,8 @@
 
 import pytest
-from topkek import create_app
-from topkek import database
-from topkek.models import User
+from topkek_server import create_app
+from topkek_server import database
+from topkek_server.models import User
 
 
 @pytest.fixture

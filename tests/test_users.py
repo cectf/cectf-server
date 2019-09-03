@@ -1,4 +1,4 @@
-from topkek import users
+from topkek_server import users
 from flask_security.core import current_user
 
 from helpers import setup_test
