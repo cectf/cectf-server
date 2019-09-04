@@ -1,4 +1,4 @@
-from topkek_server import challenges
+from cectf_server import challenges
 
 from helpers import setup_test
 

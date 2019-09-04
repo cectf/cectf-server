@@ -1,4 +1,4 @@
-from topkek import authentication
+from cectf_server import authentication
 
 
 def test_login_app(client):

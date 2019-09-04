@@ -1,4 +1,4 @@
-# topkek-
+# cectf-server
 
 You need Python 3 and pip installed to set up this project.
 

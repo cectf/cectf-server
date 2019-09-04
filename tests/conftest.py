@@ -1,8 +1,8 @@
 
 import pytest
-from topkek_server import create_app
-from topkek_server import database
-from topkek_server.models import User
+from cectf_server import create_app
+from cectf_server import database
+from cectf_server.models import User
 
 
 @pytest.fixture
