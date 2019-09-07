@@ -14,33 +14,33 @@ def get_user_by_username(username):
     return User.query.filter_by(username=username).first()
 
 
-blueprint = Blueprint("users", __name__, url_prefix="/api")
+blueprint = Blueprint('users', __name__, url_prefix='/api')
 
 
-@blueprint.route("/user")
+@blueprint.route('/user')
 @login_required
 def get_current_user_route():
     return jsonify(current_user.serialize)
 
 
-@blueprint.route("/user/username/<string:username>")
+@blueprint.route('/user/username/<string:username>')
 @roles_required('admin')
 @login_required
 def get_user_by_username_route(username):
     user = get_user_by_username(username)
     if user:
         return jsonify(user.serialize)
-    return "Username not found", 404
+    return 'Username not found', 404
 
 
-@blueprint.route("/user/<int:id>")
+@blueprint.route('/user/<int:id>')
 @roles_required('admin')
 @login_required
 def get_user_by_id_route(id):
     user = get_user_by_id(id)
     if user:
         return jsonify(user.serialize)
-    return "User ID not found", 404
+    return 'User ID not found', 404
 
 
 def init_app(app):

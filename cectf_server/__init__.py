@@ -15,8 +15,8 @@ def create_app(test_config=None):
         # the default logout returns a 302, so we define our own logout method
         SECURITY_LOGOUT_URL='/logout',
         SECURITY_REGISTER_URL='/api/register',
-        SECURITY_POST_LOGIN_VIEW="/",
-        SECURITY_POST_LOGOUT_VIEW="/"
+        SECURITY_POST_LOGIN_VIEW='/',
+        SECURITY_POST_LOGOUT_VIEW='/'
     )
 
     if test_config is None:
@@ -51,6 +51,9 @@ def create_app(test_config=None):
 
     from . import challenges
     challenges.init_app(app)
+
+    from . import challenges_admin
+    challenges_admin.init_app(app)
 
     from . import authentication
     authentication.init_app(app)

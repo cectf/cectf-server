@@ -9,11 +9,11 @@ def test_user(app, client):
     response = users.get_current_user_route()
     assert response.status_code == 200
     assert response.json ==\
-        {"id": 1,
-         "username": "a",
-         "email": "a@chiquito.com",
-         "roles": [
-             {"name": "contestant", "description": "CTF contestant"}
+        {'id': 1,
+         'username': 'a',
+         'email': 'a@chiquito.com',
+         'roles': [
+             {'name': 'contestant', 'description': 'CTF contestant'}
          ]
          }
 

@@ -20,13 +20,13 @@ class ExtendedConfirmRegisterForm(ConfirmRegisterForm):
     solves = HiddenField('solves')
 
     def validate(self):
-        self.roles.data = ["contestant"]
+        self.roles.data = ['contestant']
         self.solves.data = [Solve(
             hinted=False,
             solved=False,
             challenge=challenge)
             for challenge in Challenge.query.all()]
-        print("FORMO", self.solves.data)
+        print('FORMO', self.solves.data)
         return super().validate()
 
 

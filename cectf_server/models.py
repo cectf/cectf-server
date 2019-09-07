@@ -43,10 +43,10 @@ class User(db.Model, UserMixin):
     @property
     def serialize(self):
         return {
-            "id": self.id,
-            "email": self.email,
-            "username": self.username,
-            "roles": [role.serialize for role in self.roles]
+            'id': self.id,
+            'email': self.email,
+            'username': self.username,
+            'roles': [role.serialize for role in self.roles]
         }
 
 

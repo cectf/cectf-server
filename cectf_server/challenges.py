@@ -6,10 +6,10 @@ from .database import db
 from .models import Challenge, User, Solve
 
 
-blueprint = Blueprint("challenges", __name__, url_prefix="/api")
+blueprint = Blueprint('challenges', __name__, url_prefix='/api/ctf')
 
 
-@blueprint.route("/challenges")
+@blueprint.route('/challenges')
 @roles_required('contestant')
 @login_required
 def get_challenges():
@@ -21,7 +21,7 @@ CORRECT = 1
 ALREADY_SOLVED = 2
 
 
-@blueprint.route("/challenges/<int:challenge_id>", methods=['GET', 'POST'])
+@blueprint.route('/challenges/<int:challenge_id>', methods=['GET', 'POST'])
 @roles_required('contestant')
 @login_required
 def submit_flag(challenge_id):
@@ -32,13 +32,13 @@ def submit_flag(challenge_id):
     if solve.solved:
         return jsonify({'status': ALREADY_SOLVED})
     flag = request.get_json()['flag']
-    print("Submitting flag %s", flag)
+    print('Submitting flag %s', flag)
     if solve.challenge.solution == flag:
         solve.solved = True
         db.session.commit()
         return jsonify({'status': CORRECT, 'challenge': solve.challenge.serialize(solve)})
     else:
-        print("it no match :(")
+        print('it no match :(')
         return jsonify({'status': INCORRECT})
 
 

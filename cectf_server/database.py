@@ -23,11 +23,9 @@ def init_test_db():
     from .models import Role, User, RolesUsers, Challenge, Solve
 
     admin_role = Role(
-        id=1,
         name="admin",
         description="Site admin")
     contestant_role = Role(
-        id=2,
         name="contestant",
         description="CTF contestant")
 
@@ -36,13 +34,11 @@ def init_test_db():
     db.session.commit()
 
     a_user = User(
-        id=1,
         username="a",
         email="a@chiquito.com",
         password=utils.hash_password("b"),
         active=True)
     abc_user = User(
-        id=2,
         username="abc",
         email="abc@chiquito.com",
         password=utils.hash_password("123"),
@@ -65,14 +61,12 @@ def init_test_db():
     db.session.commit()
 
     first_challenge = Challenge(
-        id=1,
         title="The First Challenge",
         category="crypto",
         body="Just think really hard!",
         hint="CTF{l0l}",
         solution="CTF{l0l}")
     second_challenge = Challenge(
-        id=2,
         title="The Second Challenge",
         category="reversing",
         body="Just think really harder!",
