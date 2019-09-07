@@ -129,3 +129,28 @@ def test_update_challenge(app, client):
         'hint': 'HINTS ARE FER NERDS',
         'solution': 'CTF{S0_MUCH_M0R3_C0MPLIC4T3D}'
     }
+
+
+@setup_test('/api/admin/challenges/1',
+            method='POST',
+            json={},
+            user_id=2)
+def test_update_challenge_no_change(app, client):
+    response = challenges_admin.update_challenge(1)
+    assert response.status_code == 200
+    assert response.json == {
+        'id': 1,
+        'title': 'The First Challenge',
+        'category': 'crypto',
+        'body': 'Just think really hard!',
+        'hint': 'CTF{l0l}',
+        'solution': 'CTF{l0l}'
+    }
+
+
+@setup_test('/api/admin/challenges/1',
+            method='DELETE',
+            user_id=2)
+def test_delete_challenge(app, client):
+    response = challenges_admin.delete_challenge(1)
+    assert response == ('', 200)

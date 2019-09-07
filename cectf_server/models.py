@@ -37,6 +37,7 @@ class User(db.Model, UserMixin):
     confirmed_at = db.Column(db.DateTime())
     roles = db.relationship(
         'Role', secondary='roles_users', backref=db.backref('users', lazy='dynamic'))
+    solves = db.relationship('Solve', cascade='save-update, merge, delete')
     challenges = db.relationship(
         'Challenge', secondary='solve', backref=db.backref('users', lazy='dynamic'))
 
@@ -58,6 +59,8 @@ class Challenge(db.Model):
     body = db.Column(db.Text(), nullable=False)
     hint = db.Column(db.Text(), nullable=False)
     solution = db.Column(db.String(255), nullable=False)
+    solves = db.relationship(
+        'Solve', cascade='save-update, merge, delete')
 
     def serialize(self, solve=None):
         _dict = {
@@ -80,14 +83,16 @@ class Challenge(db.Model):
 
 class Solve(db.Model):
     __tablename__ = 'solve'
+    __mapper_args__ = {
+        # TODO find a way to get rid of this
+        'confirm_deleted_rows': False
+    }
     id = db.Column(db.Integer(), primary_key=True)
     hinted = db.Column(db.Boolean(), nullable=False)
     solved = db.Column(db.Boolean(), nullable=False)
     user_id = db.Column(
         'user_id', db.Integer(), db.ForeignKey('user.id'))
-    user = db.relationship('User',
-                           backref=db.backref('solves', lazy=True))
+    user = db.relationship('User')
     challenge_id = db.Column(
         'challenge_id', db.Integer(), db.ForeignKey('challenge.id'))
-    challenge = db.relationship('Challenge',
-                                backref=db.backref('solves', lazy=True))
+    challenge = db.relationship('Challenge')
