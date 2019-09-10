@@ -18,6 +18,7 @@ setup(
         'Flask',
         'Flask-Security',
         'Flask-SQLAlchemy',
+        'Flask-Cors',
         'SQLAlchemy',
         'PyMySQL',
         'bcrypt'
