@@ -44,9 +44,9 @@ def get_url(app, challenge_id, file_name):
 
 @using_role(role="contestant")
 def test_get_challenge_files(app, client):
-    write_file(app, 1, 'hello.py', "print('Hello!')")
-    write_file(app, 1, 'hello.txt', 'Hello!')
     write_file(app, 1, 'zippy.zip', 'Not really a zip file!')
+    write_file(app, 1, 'hello.txt', 'Hello!')
+    write_file(app, 1, 'hello.py', "print('Hello!')")
     write_file(app, 2, 'nope.txt', 'Should not be included!')
 
     response = client.get('/api/files/1')

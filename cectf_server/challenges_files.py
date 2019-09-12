@@ -26,7 +26,7 @@ def get_challenge_files(challenge_id):
         files = [{'name': f,
                   'url': _get_url(challenge_id, f)
                   } for f in os.listdir(files_path)]
-        return jsonify(files)
+        return jsonify(sorted(files, key=lambda f: f['name']))
     except FileNotFoundError:
         return jsonify([])
 
@@ -35,11 +35,8 @@ def get_challenge_files(challenge_id):
 @roles_required('admin')
 @login_required
 def upload_challenge_file(challenge_id):
-    print("ALL DEM FILES", request.files)
-    print("ALL DEM FILES", request.files['file'])
     file = request.files['file']
     filename = os.path.basename(file.filename)
-    print("SAVING", file, filename)
     try:
         os.makedirs(os.path.join(
             current_app.config['CECTF_FILE_LOCATION'],
