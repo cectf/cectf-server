@@ -18,7 +18,8 @@ def create_app(test_config=None):
         SECURITY_REGISTER_URL='/api/register',
         SECURITY_POST_LOGIN_VIEW='/',
         SECURITY_POST_LOGOUT_VIEW='/',
-        CECTF_FRONTEND_DOMAIN='http://localhost:5000'
+        CECTF_FRONTEND_DOMAIN='http://localhost:5000',
+        CECTF_FILE_LOCATION='/tmp/ctf/dev'
     )
 
     if test_config is None:
@@ -28,9 +29,10 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    # ensure the instance folder exists
+    # ensure the instance and ctf folders exists
     try:
         os.makedirs(app.instance_path)
+        os.makedirs(app.config['CECTF_FILE_LOCATION'])
     except OSError:
         pass
 
@@ -62,6 +64,9 @@ def create_app(test_config=None):
 
     from . import challenges_admin
     challenges_admin.init_app(app)
+
+    from . import challenges_files
+    challenges_files.init_app(app)
 
     from . import authentication
     authentication.init_app(app)

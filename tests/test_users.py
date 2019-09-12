@@ -1,12 +1,11 @@
-from cectf_server import users
 from flask_security.core import current_user
 
-from helpers import setup_test
+from helpers import using_role
 
 
-@setup_test('api/user', user_id=1)
+@using_role(role='contestant')
 def test_user(app, client):
-    response = users.get_current_user_route()
+    response = client.get('/api/user')
     assert response.status_code == 200
     assert response.json ==\
         {'id': 1,
@@ -18,7 +17,6 @@ def test_user(app, client):
          }
 
 
-@setup_test('/api/user')
 def test_user_not_logged_in(app, client):
-    response = users.get_current_user_route()
+    response = client.get('/api/user')
     assert response.status_code == 400
