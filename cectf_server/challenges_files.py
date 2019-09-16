@@ -35,6 +35,7 @@ def get_challenge_files(challenge_id):
 @roles_required('admin')
 @login_required
 def upload_challenge_file(challenge_id):
+    print(request.files)
     file = request.files['file']
     filename = os.path.basename(file.filename)
     try:
