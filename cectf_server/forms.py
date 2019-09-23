@@ -26,7 +26,6 @@ class ExtendedConfirmRegisterForm(ConfirmRegisterForm):
             solved=False,
             challenge=challenge)
             for challenge in Challenge.query.all()]
-        print('FORMO', self.solves.data)
         return super().validate()
 
 

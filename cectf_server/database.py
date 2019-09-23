@@ -13,15 +13,6 @@ db = SQLAlchemy()
 def init_db():
     db.create_all()
 
-
-def reset_db():
-    db.drop_all()
-    db.create_all()
-
-
-def init_test_db():
-    from .models import Role, User, RolesUsers, Challenge, Solve
-
     admin_role = Role(
         name="admin",
         description="Site admin")
@@ -32,6 +23,15 @@ def init_test_db():
     db.session.add(admin_role)
     db.session.add(contestant_role)
     db.session.commit()
+
+
+def reset_db():
+    db.drop_all()
+    db.create_all()
+
+
+def init_test_db():
+    from .models import Role, User, RolesUsers, Challenge, Solve
 
     a_user = User(
         username="a",
@@ -50,11 +50,11 @@ def init_test_db():
 
     a_contestant = RolesUsers(
         user_id=a_user.id,
-        role_id=contestant_role.id)
+        role_id=2)
 
     abc_admin = RolesUsers(
         user_id=abc_user.id,
-        role_id=admin_role.id)
+        role_id=1)
 
     db.session.add(a_contestant)
     db.session.add(abc_admin)
@@ -132,6 +132,54 @@ def init_test_db_command():
     click.echo('Inserted test data')
 
 
+@click.command('create-user')
+@click.option('-u', '--username', prompt='Username', help='Username.')
+@click.option('-e', '--email', prompt='Email', help='Email.')
+@click.option('-p', '--password', prompt='Password', help='Password.')
+@click.option('-r', '--role', default='', prompt='Role', help="Role. Must be 'admin', 'contestant', or ''.")
+@with_appcontext
+def create_user_command(username, email, password, role):
+    """Creates a new user"""
+    from .models import Role, User, Challenge, Solve
+
+    role = Role.query.filter_by(name=role).first()
+    roles = [role] if role else []
+    solves = [Solve(
+        hinted=False,
+        solved=False,
+        challenge=challenge)
+        for challenge in Challenge.query.all()]
+
+    user = User(
+        username=username,
+        email=email,
+        password=utils.hash_password(password),
+        roles=roles,
+        solves=solves,
+        active=True)
+
+    db.session.add(user)
+    db.session.commit()
+
+    click.echo('Inserted user')
+
+
+@click.command('delete-user')
+@click.option('-u', '--username', prompt='Username', help='The username of the user to delete.')
+@with_appcontext
+def delete_user_command(username):
+    """Deletes a user"""
+    from .models import User
+
+    user = User.query.filter_by(username=username).first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        click.echo('Deleted user data')
+    else:
+        click.echo('User not found')
+
+
 def init_app(app):
     global user_datastore
 
@@ -144,3 +192,5 @@ def init_app(app):
     app.cli.add_command(init_db_command)
     app.cli.add_command(reset_db_command)
     app.cli.add_command(init_test_db_command)
+    app.cli.add_command(create_user_command)
+    app.cli.add_command(delete_user_command)
