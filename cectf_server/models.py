@@ -25,8 +25,8 @@ class Role(db.Model, RoleMixin):
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer(), primary_key=True)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    username = db.Column(db.String(255), unique=True)  # , nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
+    username = db.Column(db.String(128), unique=True)  # , nullable=False)
     password = db.Column(db.String(255), nullable=False)
     last_login_at = db.Column(db.DateTime())
     current_login_at = db.Column(db.DateTime())
@@ -54,7 +54,7 @@ class User(db.Model, UserMixin):
 class Challenge(db.Model):
     __tablename__ = 'challenge'
     id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(255), unique=True, nullable=False)
+    title = db.Column(db.String(128), unique=True, nullable=False)
     category = db.Column(db.String(255), nullable=False)
     body = db.Column(db.Text(), nullable=False)
     hint = db.Column(db.Text(), nullable=False)
