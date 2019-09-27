@@ -1,8 +1,7 @@
-
-from flask import Blueprint, jsonify, session
+from flask import Blueprint, jsonify
 from flask_security.core import current_user
 from flask_security.decorators import login_required, roles_required
-from .database import db
+
 from .models import User
 
 

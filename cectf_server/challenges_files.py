@@ -1,11 +1,7 @@
-
 import os
-from flask import Blueprint, jsonify, request, Response, current_app
-from flask_security.core import current_user
+
+from flask import Blueprint, jsonify, request, current_app
 from flask_security.decorators import login_required, roles_required
-from werkzeug.utils import secure_filename
-from .database import db
-from .models import Challenge, User, Solve
 
 blueprint = Blueprint('challenges_files', __name__,
                       url_prefix='/api/files')

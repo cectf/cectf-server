@@ -1,5 +1,3 @@
-from flask_security.core import current_user
-
 from helpers import using_role
 
 
@@ -7,14 +5,14 @@ from helpers import using_role
 def test_user(app, client):
     response = client.get('/api/user')
     assert response.status_code == 200
-    assert response.json ==\
-        {'id': 1,
-         'username': 'a',
-         'email': 'a@chiquito.com',
-         'roles': [
-             {'name': 'contestant', 'description': 'CTF contestant'}
-         ]
-         }
+    assert response.json == \
+           {'id': 1,
+            'username': 'a',
+            'email': 'a@chiquito.com',
+            'roles': [
+                {'name': 'contestant', 'description': 'CTF contestant'}
+            ]
+            }
 
 
 def test_user_not_logged_in(app, client):

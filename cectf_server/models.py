@@ -1,5 +1,6 @@
+from flask_security import UserMixin, RoleMixin, SQLAlchemyUserDatastore
+
 from .database import db
-from flask_security import UserMixin, RoleMixin
 
 
 class RolesUsers(db.Model):
@@ -14,6 +15,7 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
+
     @property
     def serialize(self):
         return {
@@ -96,3 +98,6 @@ class Solve(db.Model):
     challenge_id = db.Column(
         'challenge_id', db.Integer(), db.ForeignKey('challenge.id'))
     challenge = db.relationship('Challenge')
+
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)

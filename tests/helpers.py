@@ -1,6 +1,4 @@
 from decorator import decorator
-from cectf_server.models import User
-from flask_security.utils import login_user
 
 
 class UserContext:
@@ -46,4 +44,5 @@ def using_role(role):
     def test_decorator(test, app, client, *args, **kwargs):
         with _role(client, role):
             return test(app, client, *args, **kwargs)
+
     return test_decorator

@@ -1,10 +1,12 @@
 import shutil
+
 import pytest
 from flask import testing
 from werkzeug.datastructures import Headers
+
+from cectf_server import commands
 from cectf_server import create_app
 from cectf_server import database
-from cectf_server.models import User
 
 
 @pytest.fixture
@@ -21,8 +23,8 @@ def app():
 
     with app.app_context():
         database.init_app(app)
-        database.reset_db()
-        database.init_test_db()
+        commands.reset_db()
+        commands.populate_test_data()
 
     try:
         shutil.rmtree(app.config['CECTF_FILE_LOCATION'])
@@ -54,3 +56,8 @@ class TestClient(testing.FlaskClient):
 def client(app):
     app.test_client_class = TestClient
     return app.test_client()
+
+
+@pytest.fixture
+def cli(app):
+    return app.test_cli_runner()

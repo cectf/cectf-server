@@ -1,10 +1,9 @@
-
-from flask import Blueprint, jsonify, request, Response
+from flask import Blueprint, jsonify, request
 from flask_security.core import current_user
 from flask_security.decorators import login_required, roles_required
-from .database import db
-from .models import Challenge, User, Solve
 
+from .database import db
+from .models import Solve
 
 blueprint = Blueprint('challenges', __name__, url_prefix='/api/ctf')
 

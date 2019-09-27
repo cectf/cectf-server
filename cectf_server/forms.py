@@ -1,11 +1,10 @@
 from flask_security.forms import LoginForm, ConfirmRegisterForm, StringField, Required, HiddenField
-from flask import session, request
-from .database import user_datastore
+
 from .models import Challenge, Solve
+from .models import user_datastore
 
 
 class ExtendedLoginForm(LoginForm):
-
     username = StringField('Username', [Required()])
 
     def validate(self):

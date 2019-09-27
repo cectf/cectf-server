@@ -114,7 +114,6 @@ def test_upload_two_challenge_files(app, client):
 
 @using_role(role='admin')
 def test_delete_challenge_file(app, client):
-
     write_file(app, 1, 'hello.py', "print('Hello!')")
 
     response = client.delete('/api/files/1/hello.py')
@@ -128,6 +127,5 @@ def test_delete_challenge_file(app, client):
 
 @using_role(role='admin')
 def test_delete_challenge_file_does_not_exist(app, client):
-
     response = client.delete('/api/files/1/hello.py')
     assert response.status_code == 404

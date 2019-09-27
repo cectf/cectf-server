@@ -1,5 +1,4 @@
-
-from flask import Blueprint, session, jsonify
+from flask import Blueprint, jsonify
 from flask_login import current_user
 from flask_security.utils import logout_user
 from flask_wtf.csrf import generate_csrf

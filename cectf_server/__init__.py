@@ -1,7 +1,8 @@
 import os
+
 from flask import Flask, Response
-from flask_security import Security
 from flask_cors import CORS
+from flask_security import Security
 
 
 def create_app(test_config=None):
@@ -39,10 +40,15 @@ def create_app(test_config=None):
     from . import database
     database.init_app(app)
 
+    from . import models
+
+    from . import commands
+    commands.init_app(app)
+
     from . import forms
 
     # Setup Flask-Security
-    security = Security(app, database.user_datastore,
+    security = Security(app, models.user_datastore,
                         login_form=forms.ExtendedLoginForm,
                         confirm_register_form=forms.ExtendedConfirmRegisterForm)
     security.unauthorized_handler(

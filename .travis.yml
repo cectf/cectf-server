@@ -1,13 +1,13 @@
 language: python
 python:
-- '3.6'
+  - '3.6'
 services:
-- mysql
+  - mysql
 before_install:
-- mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 install:
-- pip install .
-- pip install -r test_requirements.txt
+  - pip install .
+  - pip install -r test_requirements.txt
 script: pytest
 deploy:
   provider: pypi

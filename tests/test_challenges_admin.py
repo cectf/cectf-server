@@ -1,6 +1,7 @@
+import pytest
 
-from helpers import role, using_role
 from cectf_server import challenges
+from helpers import role, using_role
 
 
 @using_role(role='admin')
@@ -50,16 +51,13 @@ def test_create_challenge(app, client):
 
 @using_role(role='admin')
 def test_create_challenge_missing_title(app, client):
-    try:
+    with pytest.raises(KeyError):
         response = client.post('/api/admin/challenges', json={
             'category': 'web',
             'body': 'testing 123',
             'hint': 'hint123',
             'solution': 'CTF{123}'
         })
-        assert 'Expected KeyError' == None
-    except KeyError:
-        pass
 
 
 def test_created_challenge_can_be_solved(app, client):

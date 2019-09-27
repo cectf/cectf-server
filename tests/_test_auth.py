@@ -1,6 +1,3 @@
-from cectf_server import authentication
-
-
 def test_login_app(client):
     response = client.post(
         '/api/login/auth', json={'username': 'a', 'password': 'b'})
