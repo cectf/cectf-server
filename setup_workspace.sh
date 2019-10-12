@@ -11,3 +11,4 @@ echo "SECRET_KEY='dev'" >> instance/config.py
 echo "SECURITY_PASSWORD_SALT='salty'" >> instance/config.py
 echo "SQLALCHEMY_DATABASE_URI='mysql+pymysql://travis@localhost/dev'" >> instance/config.py
 echo "CECTF_FRONTEND_DOMAIN = 'http://localhost'" >> instance/config.py
+echo "CECTF_PRODUCTION = False" >> instance/config.py

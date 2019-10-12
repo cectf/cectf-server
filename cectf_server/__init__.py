@@ -20,7 +20,8 @@ def create_app(test_config=None):
         SECURITY_POST_LOGIN_VIEW='/',
         SECURITY_POST_LOGOUT_VIEW='/',
         CECTF_FRONTEND_DOMAIN='http://localhost:5000',
-        CECTF_FILE_LOCATION='/tmp/ctf/dev'
+        CECTF_FILE_LOCATION='/tmp/ctf/dev',
+        CECTF_PRODUCTION=True
     )
 
     if test_config is None:
@@ -76,5 +77,8 @@ def create_app(test_config=None):
 
     from . import authentication
     authentication.init_app(app)
+
+    from . import reset
+    reset.init_app(app)
 
     return app

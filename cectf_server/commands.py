@@ -7,11 +7,13 @@ from .models import Role, User, Challenge, Solve
 
 
 def drop_db():
+    print("Dropping all tables from the database...")
     db.drop_all()
     db.session.commit()
 
 
 def init_db():
+    print("Creating all tables in the database and creating base user roles...")
     db.create_all()
 
     admin_role = Role(
@@ -27,11 +29,13 @@ def init_db():
 
 
 def reset_db():
+    print("Resetting the database...")
     drop_db()
     init_db()
 
 
 def populate_test_data():
+    print("Populating test data into the database...")
     from .models import User, RolesUsers, Challenge, Solve
 
     a_user = User(
