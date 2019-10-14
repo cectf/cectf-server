@@ -1,5 +1,7 @@
 # cectf-server
 
+[![Build Status](https://travis-ci.com/cectf/cectf-server.svg?branch=master)](https://travis-ci.com/cectf/cectf-server)
+
 You need Python 3 and pip installed to set up this project.
 
 Navigate to the project repository and run `./setup_workspace.sh`. This will set up the python virtual environment and install the python dependencies.
