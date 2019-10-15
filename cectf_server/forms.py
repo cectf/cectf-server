@@ -9,7 +9,10 @@ class ExtendedLoginForm(LoginForm):
 
     def validate(self):
         self.user = user_datastore.find_user(username=self.username.data)
-        self.email.data = self.user.email
+        if self.user != None:
+            self.email.data = self.user.email
+        else:
+            self.email.data = "?"
         return super().validate()
 
 
