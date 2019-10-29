@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, Response
-from flask_cors import CORS
 from flask_security import Security
 
 
@@ -19,7 +18,6 @@ def create_app(test_config=None):
         SECURITY_REGISTER_URL='/api/register',
         SECURITY_POST_LOGIN_VIEW='/',
         SECURITY_POST_LOGOUT_VIEW='/',
-        CECTF_FRONTEND_DOMAIN='http://localhost:5000',
         CECTF_FILE_LOCATION='/tmp/ctf/dev',
         CECTF_PRODUCTION=True
     )
@@ -56,12 +54,6 @@ def create_app(test_config=None):
         lambda: Response('Unauthorized', 400))
     app.login_manager.unauthorized_handler(
         lambda: Response('Unauthorized', 400))
-
-    cors = CORS(app,
-                resources={
-                    r"/api/*": {"origins": app.config['CECTF_FRONTEND_DOMAIN']}
-                },
-                supports_credentials=True)
 
     from . import users
     users.init_app(app)

@@ -8,8 +8,7 @@ blueprint = Blueprint('challenges_files', __name__,
 
 
 def _get_url(challenge_id, filename):
-    return os.path.join(current_app.config['CECTF_FRONTEND_DOMAIN'],
-                        'files',
+    return os.path.join('files',
                         str(challenge_id),
                         filename)
 

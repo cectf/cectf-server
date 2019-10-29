@@ -8,7 +8,6 @@ def test_reset_testing():
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         'SECRET_KEY': 'test',
         'SECURITY_PASSWORD_SALT': 'test',
-        'CECTF_FRONTEND_DOMAIN': 'http://localhost',
         'CECTF_FILE_LOCATION': '/tmp/ctf/test',
         'CECTF_PRODUCTION': False
     })
@@ -23,7 +22,6 @@ def test_reset_production():
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         'SECRET_KEY': 'test',
         'SECURITY_PASSWORD_SALT': 'test',
-        'CECTF_FRONTEND_DOMAIN': 'http://localhost',
         'CECTF_FILE_LOCATION': '/tmp/ctf/test',
         'CECTF_PRODUCTION': True
     })

@@ -37,7 +37,6 @@ def write_tmp_file(app, file_name, file_contents):
 
 def get_url(app, challenge_id, file_name):
     return os.path.join(
-        app.config['CECTF_FRONTEND_DOMAIN'],
         'files',
         str(challenge_id),
         file_name)
