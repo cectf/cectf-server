@@ -44,12 +44,9 @@ def create_app(test_config=None):
     from . import commands
     commands.init_app(app)
 
-    from . import forms
-
     # Setup Flask-Security
     security = Security(app, models.user_datastore,
-                        login_form=forms.ExtendedLoginForm,
-                        confirm_register_form=forms.ExtendedConfirmRegisterForm)
+                        register_blueprint=False)
     security.unauthorized_handler(
         lambda: Response('Unauthorized', 400))
     app.login_manager.unauthorized_handler(

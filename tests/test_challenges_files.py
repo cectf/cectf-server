@@ -1,6 +1,6 @@
 import os
 
-from helpers import using_role
+from utils import using_role
 
 
 def write_file(app, challenge_id, file_name, file_contents):
