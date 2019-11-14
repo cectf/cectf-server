@@ -88,7 +88,6 @@ def _validate_password(request_json):
     return None
 
 def _validate_register_request_json(request_json):
-    print("Validating ", str(request_json))
     if request_json == None:
         return _error('Request JSON is required')
     error = _validate_email(request_json)
