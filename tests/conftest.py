@@ -37,7 +37,7 @@ class TestClient(testing.FlaskClient):
     def __init__(self, *args, **kwargs):
         self.csrf_token = ""
         super().__init__(*args, **kwargs)
-        self.csrf_token = self.get('/api/csrf').json['csrf_token']
+        self.csrf_token = self.get('/api/auth/csrf').json['csrf_token']
 
     def open(self, *args, **kwargs):
         api_key_headers = Headers({

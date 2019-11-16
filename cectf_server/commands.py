@@ -39,14 +39,14 @@ def populate_test_data():
     from .models import User, RolesUsers, Challenge, Solve
 
     a_user = User(
-        username="a",
-        email="a@chiquito.com",
-        password=utils.hash_password("b"),
+        username="contestant",
+        email="contestant@ctf.chiquito.us",
+        password=utils.hash_password("contestant"),
         active=True)
     abc_user = User(
-        username="abc",
-        email="abc@chiquito.com",
-        password=utils.hash_password("123"),
+        username="admin",
+        email="admin@ctf.chiquito.us",
+        password=utils.hash_password("admin"),
         active=True)
 
     db.session.add(a_user)

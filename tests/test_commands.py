@@ -4,6 +4,8 @@ from cectf_server import commands
 from cectf_server.database import db
 from cectf_server.models import Challenge, User, Role
 
+from data import contestant, admin, new_user, challenges
+
 
 def test_drop_db_command(cli):
     result = cli.invoke(args=['drop-db'])
@@ -26,11 +28,11 @@ def test_reset_db_command(app, cli):
 def test_populate_test_data_command(app, cli):
     with app.app_context():
         challenge = Challenge(
-            title='Challenge Title',
-            category='category',
-            body='Challenge Body',
-            hint='Challenge Hint',
-            solution='CTF{fl4g}',
+            title=challenges[2]['title'],
+            category=challenges[2]['category'],
+            body=challenges[2]['body'],
+            hint=challenges[2]['hint'],
+            solution=challenges[2]['solution'],
             solves=[]
         )
         db.session.add(challenge)
@@ -50,76 +52,84 @@ def test_populate_test_data_command(app, cli):
 
 def test_create_user_command_admin(app, cli):
     result = cli.invoke(args=['create-user',
-                              '-u', 'username',
-                              '-p', 'password',
-                              '-e', 'username@email.com',
+                              '-u', new_user['username'],
+                              '-p', new_user['password'],
+                              '-e', new_user['email'],
                               '-r', 'admin'
                               ])
 
-    assert 'Inserted user username' in result.output
+    assert 'Inserted user ' + new_user['username'] in result.output
     with app.app_context():
-        user = User.query.filter_by(username='username').first()
-        assert user.username == 'username'
-        assert utils.verify_password('password', user.password)
-        assert user.email == 'username@email.com'
+        user = User.query.filter_by(username=new_user['username']).first()
+        assert user.username == new_user['username']
+        assert utils.verify_password(new_user['password'], user.password)
+        assert user.email == new_user['email']
         assert user.roles == [Role.query.filter_by(name='admin').first()]
 
 
 def test_create_user_command_contestant(app, cli):
     result = cli.invoke(args=['create-user',
-                              '-u', 'username',
-                              '-p', 'password',
-                              '-e', 'username@email.com',
+                              '-u', new_user['username'],
+                              '-p', new_user['password'],
+                              '-e', new_user['email'],
                               '-r', 'contestant'
                               ])
 
-    assert 'Inserted user username' in result.output
+    assert 'Inserted user ' + new_user['username'] in result.output
     with app.app_context():
-        user = User.query.filter_by(username='username').first()
-        assert user.username == 'username'
-        assert utils.verify_password('password', user.password)
-        assert user.email == 'username@email.com'
+        user = User.query.filter_by(username=new_user['username']).first()
+        assert user.username == new_user['username']
+        assert utils.verify_password(new_user['password'], user.password)
+        assert user.email == new_user['email']
         assert user.roles == [Role.query.filter_by(name='contestant').first()]
 
 
 def test_create_user_command_blank(app, cli):
     result = cli.invoke(args=['create-user',
-                              '-u', 'username',
-                              '-p', 'password',
-                              '-e', 'username@email.com',
+                              '-u', new_user['username'],
+                              '-p', new_user['password'],
+                              '-e', new_user['email'],
                               '-r', '""'
                               ])
 
-    assert 'Inserted user username' in result.output
+    assert 'Inserted user ' + new_user['username'] in result.output
     with app.app_context():
-        user = User.query.filter_by(username='username').first()
-        assert user.username == 'username'
-        assert utils.verify_password('password', user.password)
-        assert user.email == 'username@email.com'
+        user = User.query.filter_by(username=new_user['username']).first()
+        assert user.username == new_user['username']
+        assert utils.verify_password(new_user['password'], user.password)
+        assert user.email == new_user['email']
         assert user.roles == []
 
 
 def test_delete_user_command(app, cli):
     with app.app_context():
-        assert User.query.filter_by(username='a').first() is not None
+        assert User.query.filter_by(
+            username=contestant['username']).first() is not None
 
-    result = cli.invoke(args=['delete-user', '-u', 'a'])
+    result = cli.invoke(args=['delete-user', '-u', contestant['username']])
 
-    assert 'Deleted user a' in result.output
+    assert 'Deleted user ' + contestant['username'] in result.output
     with app.app_context():
-        assert User.query.filter_by(username='a').first() is None
+        assert User.query.filter_by(
+            username=contestant['username']).first() is None
 
 
 def test_delete_user_command_not_found(app, cli):
     with app.app_context():
-        assert User.query.filter_by(username='a').first() is not None
-        assert User.query.filter_by(username='ab').first() is None
-        assert User.query.filter_by(username='abc').first() is not None
+        assert User.query.filter_by(
+            username=contestant['username']).first() is not None
+        assert User.query.filter_by(
+            username=admin['username']).first() is not None
+        assert User.query.filter_by(
+            username=new_user['username']).first() is None
 
-    result = cli.invoke(args=['delete-user', '-u', 'ab'])
+    result = cli.invoke(args=['delete-user', '-u', new_user['username']])
 
-    assert 'User ab not found' in result.output
+    assert 'User ' + new_user['username'] + ' not found' in result.output
     with app.app_context():
-        assert User.query.filter_by(username='a').first() is not None
-        assert User.query.filter_by(username='ab').first() is None
-        assert User.query.filter_by(username='abc').first() is not None
+        assert User.query.filter_by(
+            username=contestant['username']).first() is not None
+        assert User.query.filter_by(
+            username=admin['username']).first() is not None
+        assert User.query.filter_by(
+            username=new_user['username']).first() is None
