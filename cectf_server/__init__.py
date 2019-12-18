@@ -70,4 +70,7 @@ def create_app(test_config=None):
     from . import reset
     reset.init_app(app)
 
+    from . import jsconfig
+    jsconfig.init_app(app)
+
     return app

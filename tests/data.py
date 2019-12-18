@@ -24,24 +24,32 @@ challenges = [
         'id': 1,
         'title': 'The First Challenge',
         'category': 'crypto',
+        'author': 'ad4m',
         'body': 'Just think really hard!',
-        'hint': 'CTF{l0l}',
         'solution': 'CTF{l0l}'
     },
     {
         'id': 2,
         'title': 'The Second Challenge',
         'category': 'reversing',
+        'author': 'ev3',
         'body': 'Just think really harder!',
-        'hint': 'no cheatin',
         'solution': 'CTF{1337}'
     },
     {
         'id': 3,
         'title': 'The Third Challenge',
         'category': 'web',
+        'author':'c4rl0s',
         'body': 'testing 123',
-        'hint': 'hint123',
         'solution': 'CTF{123}'
+    },
+    {
+        'id': 4,
+        'title': 'The Fourth Challenge',
+        'category': 'binary',
+        'author':'d4ni3l',
+        'body': 'testing 1234',
+        'solution': 'CTF{1234}'
     }
 ]

@@ -23,8 +23,8 @@ def test_create_challenge(app, client):
                            json={
                                'title': data_challenges[2]['title'],
                                'category': data_challenges[2]['category'],
+                               'author': data_challenges[2]['author'],
                                'body': data_challenges[2]['body'],
-                               'hint': data_challenges[2]['hint'],
                                'solution': data_challenges[2]['solution']
                            })
     print(response.json)
@@ -38,8 +38,8 @@ def test_create_challenge_missing_title(app, client):
         client.post('/api/admin/challenges',
                     json={
                         'category': data_challenges[2]['category'],
+                        'author': data_challenges[2]['author'],
                         'body': data_challenges[2]['body'],
-                        'hint': data_challenges[2]['hint'],
                         'solution': data_challenges[2]['solution']
                     })
 
@@ -50,8 +50,8 @@ def test_created_challenge_can_be_solved(app, client):
                     json={
                         'title': data_challenges[2]['title'],
                         'category': data_challenges[2]['category'],
+                        'author': data_challenges[2]['author'],
                         'body': data_challenges[2]['body'],
-                        'hint': data_challenges[2]['hint'],
                         'solution': data_challenges[2]['solution']
                     })
     with role(client, 'contestant'):
@@ -64,9 +64,8 @@ def test_created_challenge_can_be_solved(app, client):
                 'id': data_challenges[2]['id'],
                 'title': data_challenges[2]['title'],
                 'category': data_challenges[2]['category'],
+                'author': data_challenges[2]['author'],
                 'body': data_challenges[2]['body'],
-                'solution': data_challenges[2]['solution'],
-                'hinted': False,
                 'solved': True
             }
         }
@@ -78,8 +77,8 @@ def test_update_challenge(app, client):
                            json={
                                'title': data_challenges[2]['title'],
                                'category': data_challenges[2]['category'],
+                               'author': data_challenges[2]['author'],
                                'body': data_challenges[2]['body'],
-                               'hint': data_challenges[2]['hint'],
                                'solution': data_challenges[2]['solution']
 
     })
@@ -88,8 +87,8 @@ def test_update_challenge(app, client):
         'id': data_challenges[0]['id'],
         'title': data_challenges[2]['title'],
         'category': data_challenges[2]['category'],
+        'author': data_challenges[2]['author'],
         'body': data_challenges[2]['body'],
-        'hint': data_challenges[2]['hint'],
         'solution': data_challenges[2]['solution']
     }
 

@@ -17,16 +17,16 @@ def test_get_challenges(app, client):
             'id': data_challenges[0]['id'],
             'title': data_challenges[0]['title'],
             'category': data_challenges[0]['category'],
+            'author': data_challenges[0]['author'],
             'body': data_challenges[0]['body'],
-            'hinted': False,
             'solved': False
         },
         {
             'id': data_challenges[1]['id'],
             'title': data_challenges[1]['title'],
             'category': data_challenges[1]['category'],
+            'author': data_challenges[1]['author'],
             'body': data_challenges[1]['body'],
-            'hinted': False,
             'solved': False
         },
     ]
@@ -41,8 +41,8 @@ def test_get_challenge(app, client):
         'id': data_challenges[0]['id'],
         'title': data_challenges[0]['title'],
         'category': data_challenges[0]['category'],
+        'author': data_challenges[0]['author'],
         'body': data_challenges[0]['body'],
-        'hinted': False,
         'solved': False
     }
 
@@ -58,10 +58,9 @@ def test_submit_correct_flag(app, client):
             'id': data_challenges[0]['id'],
             'title': data_challenges[0]['title'],
             'category': data_challenges[0]['category'],
+            'author': data_challenges[0]['author'],
             'body': data_challenges[0]['body'],
-            'hinted': False,
-            'solved': True,
-            'solution': data_challenges[0]['solution']
+            'solved': True
         }
     }
 

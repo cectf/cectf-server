@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify, request
 from flask_security.core import current_user
 from flask_security.decorators import login_required, roles_required
+from sqlalchemy.orm import aliased
 
 from .database import db
-from .models import Solve
+from .models import Challenge, Solve
 
 blueprint = Blueprint('challenges', __name__, url_prefix='/api/ctf')
 
@@ -12,7 +13,27 @@ blueprint = Blueprint('challenges', __name__, url_prefix='/api/ctf')
 @roles_required('contestant')
 @login_required
 def get_challenges():
-    return jsonify([solve.challenge.serialize(solve=solve) for solve in current_user.solves])
+    this_challenge = aliased(Challenge)
+    previous_challenge = aliased(Challenge)
+    previous_solves = aliased(Solve)
+    solves = Solve.query\
+        .join(Solve.challenge)\
+        .filter(Solve.user_id == current_user.id)\
+        .filter(Challenge.previous_challenge_id == None)\
+        .union(Solve.query
+               .join(this_challenge, Solve.challenge)
+               .join(previous_challenge, this_challenge.previous_challenge_id == previous_challenge.id)
+               .join(previous_solves, previous_challenge.solves)
+               .filter(Solve.user_id == current_user.id)
+               .filter(previous_solves.user_id == current_user.id)
+               .filter(previous_solves.solved)
+               )\
+    .all()
+    print("Unchained solves: ", [s.challenge_id for s in solves])
+
+    print("All solves: " + str(solves))
+
+    return jsonify([solve.challenge.serialize(solve) for solve in solves])
 
 
 INCORRECT = 0

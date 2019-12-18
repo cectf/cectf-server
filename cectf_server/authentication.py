@@ -113,7 +113,6 @@ def register():
     username = request.get_json()['username']
     roles = [Role.query.filter_by(name='contestant').first()]
     solves = [Solve(
-        hinted=False,
         solved=False,
         challenge=challenge)
         for challenge in Challenge.query.all()]

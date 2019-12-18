@@ -68,48 +68,39 @@ def populate_test_data():
     first_challenge = Challenge(
         title="The First Challenge",
         category="crypto",
+        author='ad4m',
         body="Just think really hard!",
-        hint="CTF{l0l}",
         solution="CTF{l0l}")
     second_challenge = Challenge(
         title="The Second Challenge",
         category="reversing",
+        author='ev3',
         body="Just think really harder!",
-        hint="no cheatin",
         solution="CTF{1337}")
 
     db.session.add(first_challenge)
     db.session.add(second_challenge)
     db.session.commit()
 
-    a_first = Solve(
-        user_id=a_user.id,
-        challenge_id=first_challenge.id,
-        solved=False,
-        hinted=False,
-    )
-    a_second = Solve(
-        user_id=a_user.id,
-        challenge_id=second_challenge.id,
-        solved=False,
-        hinted=False,
-    )
-    abc_first = Solve(
-        user_id=abc_user.id,
-        challenge_id=first_challenge.id,
-        solved=False,
-        hinted=False,
-    )
-    abc_second = Solve(
-        user_id=abc_user.id,
-        challenge_id=second_challenge.id,
-        solved=False,
-        hinted=False,
-    )
-    db.session.add(a_first)
-    db.session.add(a_second)
-    db.session.add(abc_first)
-    db.session.add(abc_second)
+    third_challenge = Challenge(
+        title="The Third Challenge",
+        category="web",
+        author='c4rl0s',
+        body="testing 123",
+        solution="CTF{123}",
+        previous_challenge_id=second_challenge.id)
+
+    db.session.add(third_challenge)
+    db.session.commit()
+
+    for user in (a_user, abc_user):
+        for challenge in (first_challenge, second_challenge, third_challenge):
+            solve = Solve(
+                user_id=user.id,
+                challenge_id=challenge.id,
+                solved=False,
+            )
+            db.session.add(solve)
     db.session.commit()
 
 
@@ -157,7 +148,6 @@ def create_user_command(username, email, password, role):
     role = Role.query.filter_by(name=role).first()
     roles = [role] if role else []
     solves = [Solve(
-        hinted=False,
         solved=False,
         challenge=challenge)
         for challenge in Challenge.query.all()]

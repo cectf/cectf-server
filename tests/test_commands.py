@@ -30,8 +30,8 @@ def test_populate_test_data_command(app, cli):
         challenge = Challenge(
             title=challenges[2]['title'],
             category=challenges[2]['category'],
+            author=challenges[2]['author'],
             body=challenges[2]['body'],
-            hint=challenges[2]['hint'],
             solution=challenges[2]['solution'],
             solves=[]
         )

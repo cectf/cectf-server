@@ -58,29 +58,37 @@ class Challenge(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     title = db.Column(db.String(128), unique=True, nullable=False)
     category = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.Text(), nullable=False)
     body = db.Column(db.Text(), nullable=False)
-    hint = db.Column(db.Text(), nullable=False)
     solution = db.Column(db.String(255), nullable=False)
+    previous_challenge = db.relationship('Challenge')
+    previous_challenge_id = db.Column(db.Integer, db.ForeignKey('challenge.id'), nullable=True)
     solves = db.relationship(
         'Solve', cascade='save-update, merge, delete')
 
-    def serialize(self, solve=None):
+    def serialize(self, solve):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'category': self.category,
+            'author': self.author,
+            'body': self.body,
+            'solved': solve.solved
+        }
+    
+    def serialize_admin(self):
         _dict = {
             'id': self.id,
             'title': self.title,
             'category': self.category,
+            'author': self.author,
             'body': self.body,
-            'hint': self.hint,
             'solution': self.solution
         }
-        if solve:
-            _dict['hinted'] = solve.hinted
-            if not solve.hinted:
-                del _dict['hint']
-            _dict['solved'] = solve.solved
-            if not solve.solved:
-                del _dict['solution']
+        if self.previous_challenge_id:
+            _dict['previousChallenge'] = self.previous_challenge_id
         return _dict
+
 
 
 class Solve(db.Model):
@@ -90,7 +98,6 @@ class Solve(db.Model):
         'confirm_deleted_rows': False
     }
     id = db.Column(db.Integer(), primary_key=True)
-    hinted = db.Column(db.Boolean(), nullable=False)
     solved = db.Column(db.Boolean(), nullable=False)
     user_id = db.Column(
         'user_id', db.Integer(), db.ForeignKey('user.id'))

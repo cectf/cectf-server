@@ -135,16 +135,16 @@ def test_register_success(app, client):
             'id': challenges[0]['id'],
             'title': challenges[0]['title'],
             'category': challenges[0]['category'],
+            'author': challenges[0]['author'],
             'body': challenges[0]['body'],
-            'hinted': False,
             'solved': False
         },
         {
             'id': challenges[1]['id'],
             'title': challenges[1]['title'],
             'category': challenges[1]['category'],
+            'author': challenges[1]['author'],
             'body': challenges[1]['body'],
-            'hinted': False,
             'solved': False
         },
     ]
