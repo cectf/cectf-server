@@ -1,5 +1,5 @@
 from decorator import decorator
-from data import contestant, admin
+from cectf_server.test_data import contestant, admin
 from cectf_server import commands
 
 

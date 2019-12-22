@@ -4,7 +4,7 @@ from cectf_server import commands
 from cectf_server.database import db
 from cectf_server.models import Challenge, User, Role
 
-from data import contestant, admin, new_user, challenges
+from cectf_server.test_data import contestant, admin, new_user, challenges
 
 
 def test_drop_db_command(cli):
@@ -28,16 +28,16 @@ def test_reset_db_command(app, cli):
 def test_populate_test_data_command(app, cli):
     with app.app_context():
         challenge = Challenge(
-            title=challenges[2]['title'],
-            category=challenges[2]['category'],
-            author=challenges[2]['author'],
-            body=challenges[2]['body'],
-            solution=challenges[2]['solution'],
+            title=challenges[3]['title'],
+            category=challenges[3]['category'],
+            author=challenges[3]['author'],
+            body=challenges[3]['body'],
+            solution=challenges[3]['solution'],
             solves=[]
         )
         db.session.add(challenge)
         db.session.commit()
-        assert len(Challenge.query.all()) == 3
+        assert len(Challenge.query.all()) == 4
 
     commands.reset_db()
     with app.app_context():
@@ -47,7 +47,7 @@ def test_populate_test_data_command(app, cli):
 
     assert 'Inserted test data.' in result.output
     with app.app_context():
-        assert len(Challenge.query.all()) == 2
+        assert len(Challenge.query.all()) == 3
 
 
 def test_create_user_command_admin(app, cli):

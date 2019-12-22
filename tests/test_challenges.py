@@ -1,7 +1,7 @@
 from cectf_server import challenges
 from utils import using_role
 
-from data import challenges as data_challenges
+from cectf_server.test_data import challenges as data_challenges
 
 
 def _get_headers(client):
@@ -50,7 +50,7 @@ def test_get_challenge(app, client):
 @using_role(role='contestant')
 def test_submit_correct_flag(app, client):
     response = client.post('/api/ctf/challenges/' + str(data_challenges[0]['id']),
-                           json={'flag': 'CTF{l0l}'})
+                           json={'flag': data_challenges[0]['solution']})
     assert response.status_code == 200
     assert response.json == {
         'status': challenges.CORRECT,
@@ -71,6 +71,53 @@ def test_submit_incorrect_flag(app, client):
                            json={'flag': data_challenges[2]['solution']})
     assert response.status_code == 200
     assert response.json == {'status': challenges.INCORRECT}
+
+
+@using_role(role='contestant')
+def test_submit_correct_flag_in_chain(app, client):
+    response = client.post('/api/ctf/challenges/' + str(data_challenges[1]['id']),
+                           json={'flag': data_challenges[1]['solution']})
+    assert response.status_code == 200
+    assert response.json == {
+        'status': challenges.CORRECT,
+        'challenge': {
+            'id': data_challenges[1]['id'],
+            'title': data_challenges[1]['title'],
+            'category': data_challenges[1]['category'],
+            'author': data_challenges[1]['author'],
+            'body': data_challenges[1]['body'],
+            'solved': True
+        }
+    }
+
+    response = client.get('/api/ctf/challenges')
+    assert response.status_code == 200
+    assert response.json == [
+        {
+            'id': data_challenges[0]['id'],
+            'title': data_challenges[0]['title'],
+            'category': data_challenges[0]['category'],
+            'author': data_challenges[0]['author'],
+            'body': data_challenges[0]['body'],
+            'solved': False
+        },
+        {
+            'id': data_challenges[1]['id'],
+            'title': data_challenges[1]['title'],
+            'category': data_challenges[1]['category'],
+            'author': data_challenges[1]['author'],
+            'body': data_challenges[1]['body'],
+            'solved': True
+        },
+        {
+            'id': data_challenges[2]['id'],
+            'title': data_challenges[2]['title'],
+            'category': data_challenges[2]['category'],
+            'author': data_challenges[2]['author'],
+            'body': data_challenges[2]['body'],
+            'solved': False
+        },
+    ]
 
 
 @using_role(role='contestant')

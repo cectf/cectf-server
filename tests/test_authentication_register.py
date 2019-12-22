@@ -1,4 +1,4 @@
-from data import contestant, new_user, challenges
+from cectf_server.test_data import contestant, new_user, challenges
 
 
 def test_register_json_not_provided(app, client):

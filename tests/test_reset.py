@@ -14,7 +14,7 @@ def test_reset_testing():
     })
     client = app.test_client()
     response = client.get('/api/test/reset')
-    assert response.status_code == 200
+    assert response.status_code == 204
 
 
 def test_reset_production():

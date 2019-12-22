@@ -1,4 +1,4 @@
-from data import contestant, new_user
+from cectf_server.test_data import contestant, new_user
 
 
 def test_login_no_payload(app, client):

@@ -5,9 +5,12 @@ from flask_security import utils
 from .database import db
 from .models import Role, User, Challenge, Solve
 
+from .test_data import contestant, admin, challenges
+
 
 def drop_db():
     print("Dropping all tables from the database...")
+    db.session.commit()
     db.drop_all()
     db.session.commit()
 
@@ -39,14 +42,15 @@ def populate_test_data():
     from .models import User, RolesUsers, Challenge, Solve
 
     a_user = User(
-        username="contestant",
-        email="contestant@ctf.chiquito.us",
-        password=utils.hash_password("contestant"),
-        active=True)
+        username=contestant["username"],
+        email=contestant["email"],
+        password=utils.hash_password(contestant["password"]),
+        active=True
+    )
     abc_user = User(
-        username="admin",
-        email="admin@ctf.chiquito.us",
-        password=utils.hash_password("admin"),
+        username=admin["username"],
+        email=admin["email"],
+        password=utils.hash_password(admin["password"]),
         active=True)
 
     db.session.add(a_user)
@@ -66,28 +70,28 @@ def populate_test_data():
     db.session.commit()
 
     first_challenge = Challenge(
-        title="The First Challenge",
-        category="crypto",
-        author='ad4m',
-        body="Just think really hard!",
-        solution="CTF{l0l}")
+        title=challenges[0]["title"],
+        category=challenges[0]["category"],
+        author=challenges[0]["author"],
+        body=challenges[0]["body"],
+        solution=challenges[0]["solution"])
     second_challenge = Challenge(
-        title="The Second Challenge",
-        category="reversing",
-        author='ev3',
-        body="Just think really harder!",
-        solution="CTF{1337}")
+        title=challenges[1]["title"],
+        category=challenges[1]["category"],
+        author=challenges[1]["author"],
+        body=challenges[1]["body"],
+        solution=challenges[1]["solution"])
 
     db.session.add(first_challenge)
     db.session.add(second_challenge)
     db.session.commit()
 
     third_challenge = Challenge(
-        title="The Third Challenge",
-        category="web",
-        author='c4rl0s',
-        body="testing 123",
-        solution="CTF{123}",
+        title=challenges[2]["title"],
+        category=challenges[2]["category"],
+        author=challenges[2]["author"],
+        body=challenges[2]["body"],
+        solution=challenges[2]["solution"],
         previous_challenge_id=second_challenge.id)
 
     db.session.add(third_challenge)

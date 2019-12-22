@@ -11,7 +11,7 @@ def reset():
         commands.reset_db()
         commands.populate_test_data()
         print("Done")
-        return ('', 200)
+        return ('', 204)
     else:
         print("Not resetting the database")
         return ('', 400)

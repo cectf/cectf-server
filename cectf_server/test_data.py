@@ -15,41 +15,42 @@ admin = {
 ''' A user with no fields in common with the other users. This user is not created in the test configuration. '''
 new_user = {
     'username': 'n00b',
-    'email': 'n00b@chiquito.us',
+    'email': 'n00b@ctf.chiquito.us',
     'password': 'p4ssw0rd'
 }
-''' A list of challenges. The third challenge has no fields in common with the other challenges and is not created in the test configuration. '''
+''' A list of challenges. The fourth challenge is not created in the test configuration. '''
 challenges = [
     {
         'id': 1,
         'title': 'The First Challenge',
         'category': 'crypto',
         'author': 'ad4m',
-        'body': 'Just think really hard!',
-        'solution': 'CTF{l0l}'
+        'body': 'The answer is CECTF{1}',
+        'solution': 'CECTF{1}'
     },
     {
         'id': 2,
         'title': 'The Second Challenge',
         'category': 'reversing',
         'author': 'ev3',
-        'body': 'Just think really harder!',
-        'solution': 'CTF{1337}'
+        'body': 'The answer is CECTF{2}',
+        'solution': 'CECTF{2}'
     },
     {
         'id': 3,
         'title': 'The Third Challenge',
         'category': 'web',
         'author':'c4rl0s',
-        'body': 'testing 123',
-        'solution': 'CTF{123}'
+        'body': 'The answer is CECTF{3}',
+        'solution': 'CECTF{3}',
+        'previousChallenge': 2
     },
     {
         'id': 4,
         'title': 'The Fourth Challenge',
         'category': 'binary',
         'author':'d4ni3l',
-        'body': 'testing 1234',
-        'solution': 'CTF{1234}'
+        'body': 'The answer is CECTF{4}',
+        'solution': 'CECTF{4}'
     }
 ]

@@ -1,5 +1,5 @@
 from utils import using_role
-from data import contestant
+from cectf_server.test_data import contestant
 
 
 @using_role(role='contestant')
