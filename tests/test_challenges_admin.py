@@ -34,6 +34,24 @@ def test_create_challenge(app, client):
 
 
 @using_role(role='admin')
+def test_create_challenge_with_previous_challenge(app, client):
+    response = client.post('/api/admin/challenges',
+                           json={
+                               'title': data_challenges[3]['title'],
+                               'category': data_challenges[3]['category'],
+                               'author': data_challenges[3]['author'],
+                               'body': data_challenges[3]['body'],
+                               'solution': data_challenges[3]['solution'],
+                               'previousChallenge': data_challenges[2]['id']
+                           })
+    print(response.json)
+    expected_challenge = data_challenges[3]
+    expected_challenge['previousChallenge'] = data_challenges[2]['id']
+    assert response.status_code == 200
+    assert response.json == data_challenges[3]
+
+
+@using_role(role='admin')
 def test_create_challenge_missing_title(app, client):
     with pytest.raises(KeyError):
         client.post('/api/admin/challenges',
@@ -91,6 +109,29 @@ def test_update_challenge(app, client):
         'author': data_challenges[3]['author'],
         'body': data_challenges[3]['body'],
         'solution': data_challenges[3]['solution']
+    }
+
+
+@using_role(role='admin')
+def test_update_challenge_with_previous_challenge(app, client):
+    response = client.post('/api/admin/challenges/' + str(data_challenges[0]['id']),
+                           json={
+                               'title': data_challenges[3]['title'],
+                               'category': data_challenges[3]['category'],
+                               'author': data_challenges[3]['author'],
+                               'body': data_challenges[3]['body'],
+                               'solution': data_challenges[3]['solution'],
+                               'previousChallenge': data_challenges[2]['id']
+    })
+    assert response.status_code == 200
+    assert response.json == {
+        'id': data_challenges[0]['id'],
+        'title': data_challenges[3]['title'],
+        'category': data_challenges[3]['category'],
+        'author': data_challenges[3]['author'],
+        'body': data_challenges[3]['body'],
+        'solution': data_challenges[3]['solution'],
+        'previousChallenge': data_challenges[2]['id']
     }
 
 
