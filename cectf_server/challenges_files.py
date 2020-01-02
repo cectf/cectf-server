@@ -58,7 +58,7 @@ def delete_challenge_file(challenge_id, file_name):
                                file_name))
     except:
         return ('File Not Found', 404)
-    return ('', 200)
+    return ('', 204)
 
 
 def init_app(app):
