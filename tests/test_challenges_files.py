@@ -116,7 +116,7 @@ def test_delete_challenge_file(app, client):
     write_file(app, 1, 'hello.py', "print('Hello!')")
 
     response = client.delete('/api/files/1/hello.py')
-    assert response.status_code == 200
+    assert response.status_code == 204
 
     response = client.get('/api/files/1')
 
