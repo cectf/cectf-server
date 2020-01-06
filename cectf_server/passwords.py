@@ -1,3 +1,5 @@
+# This is a simple list of the top 1000 most common passwords.
+# Anyone who attempts to register with any of these passwords gets a special error message.
 password_dictionary = [
     '123456',
     'password',
