@@ -58,3 +58,20 @@ You will need to run `pip install -e .` to install the project in the local virt
 Run `pytest` to run all tests, or `pytest tests/test_file.py` to run a specific test file.
 
 To generate a code coverage report, run `coverage run -m pytest` or `coverage run -m pytest tests/test_file.py`. `coverage` will use `pytest` to run all the tests, then store the coverage data in a `.coverage` file. Run `coverage report` to get the report in the command line, or run `coverage html` to generate an interactive HTML page in `htmlcov/index.html`.
+
+## Releasing
+
+This project is managed by [Travis CI](https://travis-ci.com/cectf/cectf-server). Any commits to any branch (specifically `dev`) are tested automatically.
+
+To cut a release of the project:
+
+* Ensure the `dev` branch is up to date and has been pushed and tested by [Travis CI](https://travis-ci.com/cectf/cectf-server).
+* Merge `dev` into `master`.
+* Open `setup.py`, find the line that says `version='a.b.c',`, and increment it to the next minor (or major) version number.
+* Commit your change.
+* Run `git tag -a <a.b.c> -m "A quick summary of what is new in this release"`, where `<a.b.c>` is your new version number, and the commit message is meaningful.
+* Run `git push origin master --tag` to push your changes to master as well as your new tag.
+* Ensure that the [Travis CI](https://travis-ci.com/cectf/cectf-server) completes successfully. 
+* Check that a new release was uploaded to [PyPI](https://pypi.org/project/cectf-server/).
+
+My [production deployment](https://ctf.chiquito.us) uses the latest tag on [PyPI](https://pypi.org/project/cectf-server/) to build a docker image which is then deployed on a cluster of Raspberry Pis.
