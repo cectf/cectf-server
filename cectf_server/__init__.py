@@ -8,9 +8,11 @@ def create_app(test_config=None):
 
     if 'FLASK_INSTANCE_DIRECTORY' in os.environ:
         # The instance directory was overwritten
+        print("Using instance location " + os.environ['FLASK_INSTANCE_DIRECTORY'])
         app = Flask(__name__, os.environ['FLASK_INSTANCE_DIRECTORY'])
     else:
         # Use the default relative instance path
+        print("Using default instance location")
         app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_mapping(
