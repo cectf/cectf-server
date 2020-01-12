@@ -5,8 +5,14 @@ from flask_security import Security
 
 
 def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+
+    if 'FLASK_INSTANCE_DIRECTORY' in os.environ:
+        # The instance directory was overwritten
+        app = Flask(__name__, os.environ['FLASK_INSTANCE_DIRECTORY'])
+    else:
+        # Use the default relative instance path
+        app = Flask(__name__, instance_relative_config=True)
+
     app.config.from_mapping(
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SECURITY_TRACKABLE=True,
