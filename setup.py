@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='cectf-server',
-    version='1.1.3',
+    version='1.1.4',
     author="Daniel Chiquito",
     author_email="daniel.chiquito@gmail.com",
     description='Backend for the CECTF',
