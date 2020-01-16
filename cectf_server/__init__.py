@@ -6,14 +6,7 @@ from flask_security import Security
 
 def create_app(test_config=None):
 
-    if 'FLASK_INSTANCE_DIRECTORY' in os.environ:
-        # The instance directory was overwritten
-        print("Using instance location " + os.environ['FLASK_INSTANCE_DIRECTORY'])
-        app = Flask(__name__, os.environ['FLASK_INSTANCE_DIRECTORY'])
-    else:
-        # Use the default relative instance path
-        print("Using default instance location")
-        app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_mapping(
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
@@ -31,10 +24,12 @@ def create_app(test_config=None):
     )
 
     if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
+        if app.config.from_envvar('CECTF_CONFIG', silent=True):
+            print("Loaded configuration from CECTF_CONFIG: " + os.environ['CECTF_CONFIG'])
+        else:
+            print("Loading configuration from relative config.py")
+            app.config.from_pyfile('config.py', silent=False)
     else:
-        # load the test config if passed in
         app.config.from_mapping(test_config)
 
     # ensure the instance and ctf folders exists
